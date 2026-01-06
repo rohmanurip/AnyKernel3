@@ -4,7 +4,7 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=Lunar Kernel by Kenskuyy
+kernel.string=Perf+ Kernel by rohmanurip
 do.devicecheck=1
 do.modules=0
 do.systemless=1
