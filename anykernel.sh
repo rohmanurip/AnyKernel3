@@ -1,14 +1,15 @@
 # AnyKernel3 Ramdisk Mod Script
 # osm0sis @ xda-developers
 
-# FusionX kernel custom installer by SenX
+# Perf+ kernel custom installer by rohmanurip
 
-# Big thanks to these guys from whom i've taken ideas.
-# @KaminariKo (FakeDreamer Kernel) and @sk113r (E404 kernel)
+# Big thanks to these guys.
+# @KaminariKo (FakeDreamer Kernel), @sk113r (E404 kernel) and @WazzupSensei911 (FusionX Kernel)
 
 ## AnyKernel setup
 # begin properties
 properties() { '
+kernel.string=Perf+ Kernel by rohmanurip
 do.devicecheck=1
 do.modules=0
 do.systemless=1
@@ -326,15 +327,15 @@ auto_install() {
   esac
 }
 
-process_fusionx_file() {
-  FUSIONX_FILE=$(find . -type f -name "*.fusionX" | head -n 1)
+process_perf_file() {
+  PERF_FILE=$(find . -type f -name "*.perf" | head -n 1)
 
-  if [ -n "$FUSIONX_FILE" ]; then
-    ui_print "Detected .fusionX file: $FUSIONX_FILE"
+  if [ -n "$PERF_FILE" ]; then
+    ui_print "Detected .perf file: $PERF_FILE"
     ui_print " ";
     
-    FILE_NAME=$(basename "$FUSIONX_FILE")
-    FILE_NAME_NO_EXT=$(echo "$FILE_NAME" | sed 's/\.fusionX$//')
+    FILE_NAME=$(basename "$PERF_FILE")
+    FILE_NAME_NO_EXT=$(echo "$FILE_NAME" | sed 's/\.perf$//')
     
     UI_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f1)  
     CPU_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f2)  
@@ -344,9 +345,9 @@ process_fusionx_file() {
       ui_print "┌─────────────────────────────────┐";
       ui_print "│         FORMAT ERROR!           │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "Invalid .fusionX filename format!";
-      ui_print "Required format: [ui]-[cpu]-[gpu].fusionX";
-      abort "ERROR: Invalid .fusionX format! Use: [ui]-[cpu]-[gpu].fusionX";
+      ui_print "Invalid .perf filename format!";
+      ui_print "Required format: [ui]-[cpu]-[gpu].perf";
+      abort "ERROR: Invalid .perf format! Use: [ui]-[cpu]-[gpu].perf";
     fi
     
     case "$UI_VARIANT" in
@@ -481,7 +482,7 @@ process_fusionx_file() {
       fi
     fi
 
-    rm -f "$FUSIONX_FILE"
+    rm -f "$PERF_FILE"
     return 0
   else
     ui_print "No configuration file found!!";
@@ -515,8 +516,8 @@ ui_print " ";
 if [ "$INSTALL_METHOD" = "manual" ]; then
   manual_install
 elif [ "$INSTALL_METHOD" = "auto" ]; then
-  if [ "$SIDELOAD" = "1" ] && process_fusionx_file; then
-    ui_print "Using configuration from fusionX file";
+  if [ "$SIDELOAD" = "1" ] && process_perf_file; then
+    ui_print "Using configuration from perf file";
   else
     auto_install
   fi
