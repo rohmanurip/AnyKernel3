@@ -32,7 +32,34 @@ ramdisk_compression=auto;
 ## AnyKernel file attributes
 # set permissions/ownership for included ramdisk files
 set_perm_recursive 0 0 750 750 $ramdisk/*;
+set_perm_recursive 0 0 750 750 $ramdisk/init* $ramdisk/sbin;
 
+# Auto-detect variant from zip name
+case "$ZIPFILE" in
+  *N0Kernel*) v=default;;
+  *-miui)     v=miui;;
+esac
+
+# Automatic miui detection
+region="$(file_getprop /vendor/build.prop "ro.vendor.miui.build.region")"
+if [ -z "$region" ]; then
+  region="$(file_getprop /product/etc/build.prop "ro.miui.build.region")"
+fi
+case "$region" in
+  cn|in|ru|id|eu|tr|tw|gb|global|mx|jp|kr|lm|cl|mi)
+      v=miui
+      ui_print "  -> MIUI ROM is detected!"
+    ;;
+esac
+
+# Select default if still unset
+[ -z "$v" ] && v=default
+
+# Apply the right dtbo
+ui_print " • Using $v DTBO"
+if [ "$v" != default ]; then
+  rm -f dtbo.img && mv "$v/dtbo.img" "dtbo.img"
+fi
 
 ## AnyKernel install
 dump_boot;
